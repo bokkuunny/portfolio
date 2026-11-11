@@ -1,424 +1,84 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>서은실 | 놀자, 놀자, 새롭게 놀자</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#fbf4e7" />
+<title>서은실 | 놀자, 놀자, 새롭게 놀자~!!</title>
 <style>
-  :root {
-    --cream: #FBF4E4;
-    --cream-deep: #F3E7CC;
-    --navy: #1B2A5C;
-    --navy-soft: rgba(27, 42, 92, 0.55);
-    --coral: #FF6F61;
-    --coral-dark: #E9564A;
-    --gray: #CFCFCF;
-    --hand: "Nanum Pen Script", "Gaegu", "Segoe Script", cursive;
-    --serif: "Noto Serif KR", "Nanum Myeongjo", "Batang", Georgia, serif;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; }
-  body {
-    background: var(--cream);
-    color: var(--navy);
-    font-family: var(--serif);
-    font-size: 1.1rem;
-    line-height: 1.9;
-    overflow-x: hidden;
-  }
-
-  /* ---------- 반짝이는 별 ---------- */
-  #stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-  .star {
-    position: absolute;
-    color: var(--navy);
-    opacity: 0.1;
-    animation: twinkle var(--dur, 7s) ease-in-out var(--delay, 0s) infinite;
-  }
-  @keyframes twinkle {
-    0%, 100% { opacity: 0.06; transform: scale(0.7); }
-    50% { opacity: 0.5; transform: scale(1.15); }
-  }
-
-  /* ---------- 명함 한 장 ---------- */
-  .stage {
-    position: relative;
-    z-index: 1;
-    min-height: 100svh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 28px;
-  }
-  .namecard {
-    width: 100%;
-    max-width: 1120px;
-    height: min(86svh, 780px);
-    background: rgba(251, 244, 228, 0.92);
-    border: 1.5px solid var(--navy);
-    outline: 1.5px solid var(--navy);
-    outline-offset: -9px;
-    box-shadow: 0 24px 50px -28px rgba(27, 42, 92, 0.55);
-    display: grid;
-    grid-template-columns: 42% 1fr;
-    overflow: hidden;
-  }
-
-  /* 왼쪽: 얼굴 */
-  .left {
-    padding: 44px 34px 40px 44px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    border-right: 1px solid var(--navy);
-    justify-content: center;
-  }
-  .photo {
-    width: 128px;
-    aspect-ratio: 4 / 5;
-    background: var(--gray);
-    border: 1.5px solid var(--navy);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #6f6f6f;
-    font-size: 0.9rem;
-    letter-spacing: 0.3em;
-  }
-  .kicker {
-    font-size: 0.78rem;
-    letter-spacing: 0.35em;
-    color: var(--navy-soft);
-    text-transform: uppercase;
-  }
-  .name {
-    font-family: var(--hand);
-    font-size: clamp(3.6rem, 6vw, 5.2rem);
-    font-weight: 400;
-    line-height: 1;
-    margin-top: 4px;
-  }
-  .dept { letter-spacing: 0.25em; color: var(--navy-soft); line-height: 1.4; }
-  .typing {
-    font-family: var(--hand);
-    font-size: clamp(1.9rem, 3vw, 2.5rem);
-    line-height: 1.3;
-    min-height: 2.7em;
-    border-top: 1px solid var(--navy);
-    padding-top: 12px;
-    margin-top: 6px;
-  }
-  .caret {
-    display: inline-block;
-    width: 2px;
-    height: 1em;
-    background: var(--coral);
-    margin-left: 3px;
-    vertical-align: -0.12em;
-    animation: blink 0.9s steps(1) infinite;
-  }
-  @keyframes blink { 50% { opacity: 0; } }
-  .about { font-size: 1.1rem; line-height: 1.95; }
-
-  /* 오른쪽: 핵심 */
-  .right {
-    padding: 38px 44px 34px 34px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-  }
-  h2 {
-    font-family: var(--hand);
-    font-weight: 400;
-    font-size: 2.1rem;
-    line-height: 1;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  h2::after { content: ""; flex: 1; height: 1px; background: var(--navy); opacity: 0.4; }
-
-  /* 뒤집히는 강점 카드 */
-  .strengths { display: grid; gap: 10px; }
-  .flip {
-    perspective: 900px;
-    height: 100px;
-    cursor: pointer;
-    outline: none;
-  }
-  .flip-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.7s cubic-bezier(0.3, 0.8, 0.3, 1);
-    transform-style: preserve-3d;
-  }
-  .flip:hover .flip-inner,
-  .flip:focus-visible .flip-inner,
-  .flip.flipped .flip-inner { transform: rotateY(180deg); }
-  .flip:focus-visible { box-shadow: 0 0 0 3px var(--coral); }
-  .face {
-    position: absolute;
-    inset: 0;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    border: 1.5px solid var(--navy);
-    padding: 8px 18px;
-    display: flex;
-    align-items: center;
-  }
-  .front { background: var(--cream-deep); justify-content: space-between; }
-  .front .t { font-family: var(--hand); font-size: 2.2rem; line-height: 1; }
-  .front .hint { font-size: 0.8rem; letter-spacing: 0.2em; color: var(--navy-soft); }
-  .back {
-    background: var(--navy);
-    color: var(--cream);
-    transform: rotateY(180deg);
-    font-size: 1rem;
-    line-height: 1.7;
-  }
-
-  /* 펼쳐지는 경험 카드 */
-  .exps { display: grid; gap: 10px; }
-  .exp { border: 1.5px solid var(--navy); background: #fff9; }
-  .exp-head {
-    width: 100%;
-    background: none;
-    border: 0;
-    font: inherit;
-    color: inherit;
-    text-align: left;
-    cursor: pointer;
-    padding: 6px 18px;
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
-  }
-  .exp-head:focus-visible { outline: 3px solid var(--coral); outline-offset: -3px; }
-  .exp-head .t { font-family: var(--hand); font-size: 2rem; line-height: 1.2; }
-  .exp-head .p { color: var(--navy-soft); letter-spacing: 0.1em; font-size: 0.95rem; }
-  .exp-head .plus {
-    margin-left: auto;
-    font-size: 1.5rem;
-    color: var(--coral);
-    transition: transform 0.3s;
-  }
-  .exp.open .plus { transform: rotate(45deg); }
-  .exp-body {
-    display: grid;
-    grid-template-rows: 0fr;
-    transition: grid-template-rows 0.4s ease;
-  }
-  .exp.open .exp-body { grid-template-rows: 1fr; }
-  .exp-body > div { overflow: hidden; }
-  .exp-body dl {
-    display: grid;
-    grid-template-columns: 4em 1fr;
-    gap: 2px 12px;
-    padding: 4px 18px 14px;
-    border-top: 1px dashed var(--navy-soft);
-  }
-  .exp-body dt { color: var(--coral-dark); font-weight: 700; }
-
-  .bottom {
-    margin-top: auto;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding-top: 14px;
-    border-top: 1px solid var(--navy);
-  }
-  .field-label { font-size: 0.78rem; letter-spacing: 0.3em; color: var(--navy-soft); line-height: 1.2; }
-  .field { font-family: var(--hand); font-size: 2.2rem; line-height: 1.1; }
-  .contact { text-align: right; line-height: 1.5; }
-  .contact .mail { font-size: 0.95rem; word-break: break-all; }
-  .btn {
-    display: inline-block;
-    margin-top: 6px;
-    background: var(--coral);
-    color: #fff;
-    border: 1.5px solid var(--navy);
-    padding: 6px 22px;
-    font-family: var(--serif);
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-decoration: none;
-    transition: background 0.2s, transform 0.2s;
-  }
-  .btn:hover { background: var(--coral-dark); transform: translateY(-2px); }
-
-  /* ---------- 휴대폰 ---------- */
-  @media (max-width: 860px) {
-    .stage { padding: 14px; align-items: flex-start; }
-    .namecard {
-      height: auto;
-      grid-template-columns: 1fr;
-      overflow: visible;
-    }
-    .left {
-      border-right: 0;
-      border-bottom: 1px solid var(--navy);
-      padding: 34px 26px 28px;
-    }
-    .right { padding: 28px 26px 32px; overflow: visible; }
-    .photo { width: 110px; }
-    .contact { text-align: left; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .star, .caret { animation: none; }
-    .flip-inner, .exp-body, .plus { transition: none; }
-  }
+:root { --cream:#fbf4e7; --navy:#182748; --coral:#fa715d; --muted:#666c77; --line:rgba(24,39,72,.16); --card:#fffaf1; }
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Pretendard,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;color:var(--navy);background:var(--cream)}body{overflow:hidden}a{color:inherit}button{font:inherit}::selection{background:#ffd4c7;color:var(--navy)}
+.page{display:grid;grid-template-columns:minmax(340px,43%) minmax(0,57%);height:100dvh;position:relative;isolation:isolate}.page:before{content:"";pointer-events:none;position:fixed;inset:0;background-image:radial-gradient(circle,rgba(24,39,72,.035) 1px,transparent 1px);background-size:26px 26px;z-index:-2}
+.stars{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}.star{position:absolute;color:#e5a974;opacity:.15;animation:twinkle var(--duration,5s) ease-in-out infinite alternate;animation-delay:var(--delay,0s);font-size:var(--size,13px)}@keyframes twinkle{0%{opacity:.08;transform:scale(.65) rotate(0deg)}100%{opacity:.65;transform:scale(1.2) rotate(24deg)}}
+.sidebar{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(28px,4.8vw,78px);border-right:1px solid var(--line);min-height:0}.brand{font-size:13px;letter-spacing:.22em;font-weight:900}.brand span{color:var(--coral)}.intro{margin:auto 0;max-width:590px}.eyebrow{letter-spacing:.18em;font-size:12px;font-weight:900;text-transform:uppercase;color:var(--coral);margin:0 0 22px}.intro h1{font-size:clamp(47px,5.8vw,91px);line-height:1.03;letter-spacing:-.075em;margin:0 0 24px;font-weight:900}.intro h1 em{font-style:normal;color:var(--coral)}.typewriter{font-size:clamp(19px,2vw,29px);line-height:1.55;letter-spacing:-.055em;min-height:3.2em;max-width:450px;font-weight:800;word-break:keep-all}.cursor{display:inline-block;width:3px;height:1.1em;background:var(--coral);vertical-align:-.16em;margin-left:3px;animation:blink .75s step-end infinite}@keyframes blink{50%{opacity:0}}.summary{font-size:15px;line-height:1.95;color:#4d5669;max-width:420px;margin:22px 0 30px;word-break:keep-all}.buttons{display:flex;flex-wrap:wrap;gap:11px}.btn{background:var(--coral);color:#fff;border:2px solid var(--coral);text-decoration:none;border-radius:100px;padding:13px 21px;font-size:13px;font-weight:900;display:inline-flex;align-items:center;gap:9px;transition:.2s}.btn:hover{transform:translateY(-3px);filter:brightness(.96)}.btn.outline{background:transparent;color:var(--navy);border-color:var(--navy)}.sidebar-bottom{display:flex;justify-content:space-between;align-items:center;gap:16px;color:var(--muted);font-size:12px}.status{display:inline-flex;align-items:center;gap:7px}.status i{width:8px;height:8px;background:var(--coral);border-radius:50%;display:inline-block}
+.content{position:relative;z-index:1;overflow-y:auto;overscroll-behavior:contain;scroll-behavior:smooth;padding:clamp(30px,5vw,80px);scrollbar-color:#d9cbb9 transparent}.content-inner{max-width:950px;margin:auto}.section{padding:20px 0 74px;border-bottom:1px solid var(--line);scroll-margin-top:30px}.section+.section{padding-top:70px}.section-head{display:flex;align-items:center;gap:12px;margin-bottom:26px}.section-no{color:var(--coral);font-size:12px;font-weight:900;letter-spacing:.12em}.section h2{font-size:clamp(28px,3vw,44px);line-height:1.2;letter-spacing:-.055em;margin:0}.section-lead{color:var(--muted);font-size:15px;line-height:1.85;margin:0 0 24px}
+.photo-wrap{display:grid;grid-template-columns:minmax(0,1.03fr) minmax(0,1fr);gap:22px;align-items:stretch}.photo{border-radius:20px;background:#dedede;min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#747474;border:1px solid #c9c9c9}.photo-icon{font-size:55px;font-weight:200;line-height:1}.photo small{font-size:13px;letter-spacing:.08em}.bio-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:clamp(22px,2.8vw,38px);display:flex;flex-direction:column;justify-content:center}.mini-label{font-weight:900;color:var(--coral);font-size:12px;letter-spacing:.13em;margin-bottom:13px}.bio-card h3{font-size:clamp(25px,2.4vw,37px);margin:0 0 16px;letter-spacing:-.06em}.bio-card p{line-height:1.9;color:#555d70;font-size:15px;margin:0;word-break:keep-all}.tag{border-radius:100px;border:1px solid var(--line);padding:7px 12px;font-size:12px;font-weight:800;align-self:flex-start;margin-top:22px}
+.ticker{overflow:hidden;margin:24px calc(-1 * clamp(30px,5vw,80px)) 30px;border-top:1px solid var(--navy);border-bottom:1px solid var(--navy);background:var(--navy);color:var(--cream);transform:rotate(-1deg)}.ticker-track{display:flex;width:max-content;animation:marquee 24s linear infinite}.ticker-set{display:flex;align-items:center;gap:24px;white-space:nowrap;padding:16px 12px;font-weight:900;font-size:clamp(17px,1.7vw,24px)}.ticker-set b{color:var(--coral);font-size:14px}@keyframes marquee{to{transform:translateX(-50%)}}.skills{display:grid;gap:12px}.skill{padding:23px 25px;border:1px solid var(--line);background:rgba(255,255,255,.42);border-radius:17px;display:grid;grid-template-columns:100px 1fr;gap:18px;align-items:start}.skill strong{font-size:16px;letter-spacing:-.04em}.skill p{margin:0;color:#555d70;line-height:1.8;font-size:14px;word-break:keep-all}
+.carousel-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}.carousel-top .section-lead{margin:0}.arrows{display:flex;gap:9px}.arrow{width:43px;height:43px;border-radius:50%;border:1px solid var(--navy);background:transparent;color:var(--navy);font-size:23px;cursor:pointer;transition:.2s}.arrow:hover:not(:disabled){background:var(--navy);color:#fff}.arrow:disabled{opacity:.28;cursor:default}.slider-window{overflow:hidden;border-radius:21px}.slides{display:flex;transition:transform .45s cubic-bezier(.22,.61,.36,1)}.slide{flex:0 0 100%;min-width:0;background:#fff8ea;border:1px solid var(--line);border-radius:21px;padding:clamp(26px,4vw,48px);min-height:320px;display:flex;flex-direction:column}.slide-count{font-size:12px;letter-spacing:.15em;color:var(--coral);font-weight:900;margin-bottom:22px}.slide h3{font-size:clamp(35px,4vw,52px);margin:0 0 17px;letter-spacing:-.06em}.experience-meta{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:22px}.experience-meta span{border:1px solid var(--line);padding:6px 11px;border-radius:30px;font-size:12px;font-weight:750}.slide dl{display:grid;grid-template-columns:55px 1fr;gap:13px 10px;font-size:14px;line-height:1.7;margin:auto 0 0}.slide dt{font-weight:900}.slide dd{margin:0;color:#555d70;word-break:keep-all}.dots{display:flex;gap:7px;margin-top:17px}.dot{width:8px;height:8px;border:none;background:#b8b3aa;border-radius:20px;padding:0;cursor:pointer;transition:.2s}.dot.active{background:var(--coral);width:29px}
+.field-box{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:24px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.35)}.field-box strong{font-size:28px;letter-spacing:-.06em}.field-box span{font-size:12px;color:var(--muted)}.contact{border-bottom:none;padding-bottom:25px}.mail{font-size:clamp(22px,2.7vw,37px);letter-spacing:-.05em;display:inline-block;margin-top:6px;font-weight:900;overflow-wrap:anywhere;text-decoration-thickness:2px;text-decoration-color:var(--coral);text-underline-offset:7px}.footer{padding:35px 0 10px;font-size:12px;color:var(--muted)}
+@media(max-width:1050px){.page{grid-template-columns:minmax(300px,41%) minmax(0,59%)}.sidebar{padding:34px}.content{padding:40px 30px}.ticker{margin-left:-30px;margin-right:-30px}.photo-wrap{grid-template-columns:1fr}.photo{min-height:260px}.intro h1{font-size:clamp(48px,6vw,72px)}}
+@media(max-width:700px){body{overflow:auto}.page{display:block;height:auto}.sidebar{min-height:88svh;border-right:none;border-bottom:1px solid var(--line);padding:27px 24px 32px}.intro{margin:70px 0}.intro h1{font-size:clamp(52px,13vw,79px)}.typewriter{font-size:23px}.sidebar-bottom{font-size:11px}.content{overflow:visible;padding:24px;max-width:100%}.section{padding-bottom:54px}.section+.section{padding-top:52px}.photo-wrap{grid-template-columns:1fr}.photo{min-height:280px}.ticker{margin-left:-24px;margin-right:-24px}.skill{grid-template-columns:1fr;gap:10px}.slide{min-height:330px}.field-box strong{font-size:24px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.star{opacity:.3}.cursor{animation:none}}
 </style>
 </head>
 <body>
-
-<div id="stars" aria-hidden="true"></div>
-
-<div class="stage">
-  <article class="namecard">
-
-    <!-- 왼쪽 -->
-    <section class="left">
-      <div class="photo">사진</div>
-      <p class="kicker">Portfolio</p>
-      <div>
-        <h1 class="name">서은실</h1>
-        <p class="dept">컴교</p>
-      </div>
-      <p class="typing" aria-label="놀자, 놀자, 새롭게 놀자~!!"><span id="typed"></span><span class="caret"></span></p>
-      <p class="about">노는 게 좋고, 여기저기 다니면서 놀아보니 새로운 것도  느끼게 되고, 그래서 더 많은 곳에 가보고 싶어졌다.</p>
-    </section>
-
-    <!-- 오른쪽 -->
-    <section class="right">
-      <div>
-        <h2>강점·역량</h2>
-        <div class="strengths">
-          <div class="flip" tabindex="0" role="button" aria-label="혼자 놀기, 누르면 뒤집힙니다">
-            <div class="flip-inner">
-              <div class="face front"><span class="t">혼자 놀기</span><span class="hint">HOVER</span></div>
-              <div class="face back">조금 외롭겠지만 마냥 편하니 이보다 좋을소냐~~</div>
-            </div>
-          </div>
-          <div class="flip" tabindex="0" role="button" aria-label="같이 놀기, 누르면 뒤집힙니다">
-            <div class="flip-inner">
-              <div class="face front"><span class="t">같이 놀기</span><span class="hint">HOVER</span></div>
-              <div class="face back">혼자 놀다가도 가끔 좋은 사람과 순간을 공유하면 이것도 좋지~</div>
-            </div>
-          </div>
-          <div class="flip" tabindex="0" role="button" aria-label="즉석 만남, 누르면 뒤집힙니다">
-            <div class="flip-inner">
-              <div class="face front"><span class="t">즉석 만남</span><span class="hint">HOVER</span></div>
-              <div class="face back">약간 두렵기도 하겠지만 설레는 건....*아이만 아니면  같이 해 볼만도 하지...</div>
-            </div>
-          </div>
+<div class="stars" id="stars" aria-hidden="true"></div>
+<div class="page">
+  <aside class="sidebar" aria-label="고정 소개 영역">
+    <div class="brand">EUNSIL<span>✳</span> PLAYBOOK</div>
+    <div class="intro">
+      <p class="eyebrow">WELCOME TO MY PLAYGROUND</p>
+      <h1>서은실<span style="color:var(--coral)">.</span><br><em>PLAY!</em></h1>
+      <div class="typewriter"><span id="typed" aria-label="놀자, 놀자, 새롭게 놀자~!!"></span><span class="cursor" aria-hidden="true"></span></div>
+      <p class="summary">노는 게 좋고, 여기저기 다니면서 놀아보니 새로운 것도 느끼게 되고, 그래서 더 많은 곳에 가보고 싶어졌다.</p>
+      <div class="buttons"><a href="#about" class="btn">나를 알아보기 ↗</a><a href="mailto:ses2349@gmail.com" class="btn outline">연락하기 ↗</a></div>
+    </div>
+    <div class="sidebar-bottom"><span class="status"><i></i> 이사도라를 꿈꾸는 중</span><span>컴교 · 서은실</span></div>
+  </aside>
+  <main class="content" id="main-content">
+    <div class="content-inner">
+      <section class="section" id="about">
+        <div class="section-head"><span class="section-no">01 / ABOUT</span><h2>잘 노는 게 내 스타일</h2></div>
+        <p class="section-lead">보고, 먹고, 놀고. 새로운 순간을 찾아가는 이야기.</p>
+        <div class="photo-wrap">
+          <div class="photo" role="img" aria-label="사진을 넣을 자리: 회색 상자"><span class="photo-icon">▧</span><small>PHOTO HERE</small><small>사진을 넣을 자리</small></div>
+          <div class="bio-card"><span class="mini-label">HELLO, I'M</span><h3>서은실</h3><p>노는 게 좋고, 여기저기 다니면서 놀아보니 새로운 것도 느끼게 되고, 그래서 더 많은 곳에 가보고 싶어졌다.</p><span class="tag">컴교</span></div>
         </div>
-      </div>
-
-      <div>
-        <h2>경험·활동</h2>
-        <div class="exps">
-          <div class="exp">
-            <button class="exp-head" type="button" aria-expanded="false">
-              <span class="t">시작</span><span class="p">2007.04</span><span class="plus">+</span>
-            </button>
-            <div class="exp-body"><div>
-              <dl>
-                <dt>역할</dt><dd>주인공</dd>
-                <dt>한 일</dt><dd>보고, 먹고, 놀고....</dd>
-                <dt>결과</dt><dd>처음이라 제대로 못함.....10점 만점에 4점</dd>
-              </dl>
-            </div></div>
-          </div>
-          <div class="exp">
-            <button class="exp-head" type="button" aria-expanded="false">
-              <span class="t">권태</span><span class="p">2024.07</span><span class="plus">+</span>
-            </button>
-            <div class="exp-body"><div>
-              <dl>
-                <dt>역할</dt><dd>들러리</dd>
-                <dt>한 일</dt><dd>그냥 같이 해주기</dd>
-                <dt>결과</dt><dd>맛집 섭</dd>
-              </dl>
-            </div></div>
-          </div>
+      </section>
+      <section class="section" id="strengths">
+        <div class="section-head"><span class="section-no">02 / MY WAY</span><h2>노는 것도 재능이라면</h2></div>
+        <p class="section-lead">내가 좋아하는 세 가지 놀이 방식.</p>
+        <div class="ticker" aria-label="강점 키워드: 혼자 놀기, 같이 놀기, 즉석 만남"><div class="ticker-track"><div class="ticker-set">혼자 놀기 <b>✳</b> 같이 놀기 <b>✳</b> 즉석 만남 <b>✳</b></div><div class="ticker-set" aria-hidden="true">혼자 놀기 <b>✳</b> 같이 놀기 <b>✳</b> 즉석 만남 <b>✳</b></div></div></div>
+        <div class="skills">
+          <article class="skill"><strong>혼자 놀기</strong><p>조금 외롭겠지만 마냥 편하니 이보다 좋을소냐~~</p></article>
+          <article class="skill"><strong>같이 놀기</strong><p>혼자 놀다가도 가끔 좋은 사람과 순간을 공유하면 이것도 좋지~</p></article>
+          <article class="skill"><strong>즉석 만남</strong><p>약간 두렵기도 하겠지만 설레는 건....*아이만 아니면 같이 해 볼만도 하지...</p></article>
         </div>
-      </div>
-
-      <div class="bottom">
-        <div>
-          <p class="field-label">ACTIVITY FIELD</p>
-          <p class="field">이사도라</p>
-        </div>
-        <div class="contact">
-          <p class="mail">ses2349@gmail.com</p>
-          <a class="btn" href="mailto:ses2349@gmail.com">메일 보내기</a>
-        </div>
-      </div>
-    </section>
-
-  </article>
+      </section>
+      <section class="section" id="experiences">
+        <div class="section-head"><span class="section-no">03 / MOMENTS</span><h2>그동안의 장면들</h2></div>
+        <div class="carousel-top"><p class="section-lead">옆으로 넘기며 보는 나의 기록.</p><div class="arrows"><button type="button" class="arrow" id="prev" aria-label="이전 경험">←</button><button type="button" class="arrow" id="next" aria-label="다음 경험">→</button></div></div>
+        <div class="slider-window" tabindex="0" aria-label="경험 카드 슬라이더, 방향키로 이동할 수 있습니다"><div class="slides" id="slides">
+          <article class="slide"><div class="slide-count">MOMENT 01 / 02</div><h3>시작</h3><div class="experience-meta"><span>2007.04</span><span>주인공</span></div><dl><dt>한 일</dt><dd>보고, 먹고, 놀고....</dd><dt>결과</dt><dd>처음이라 제대로 못함.....10점 만점에 4점</dd></dl></article>
+          <article class="slide"><div class="slide-count">MOMENT 02 / 02</div><h3>권태</h3><div class="experience-meta"><span>2024.07</span><span>들러리</span></div><dl><dt>한 일</dt><dd>그냥 같이 해주기</dd><dt>결과</dt><dd>맛집 섭</dd></dl></article>
+        </div></div>
+        <div class="dots" aria-label="경험 카드 선택"><button type="button" class="dot active" aria-label="첫 번째 경험 보기" aria-current="true" data-index="0"></button><button type="button" class="dot" aria-label="두 번째 경험 보기" aria-current="false" data-index="1"></button></div>
+      </section>
+      <section class="section" id="field"><div class="section-head"><span class="section-no">04 / DIRECTION</span><h2>마음이 향하는 곳</h2></div><div class="field-box"><div><span>활동 분야</span><br><strong>이사도라</strong></div><span aria-hidden="true" style="font-size:42px;color:var(--coral)">✳</span></div></section>
+      <section class="section contact" id="contact"><div class="section-head"><span class="section-no">05 / CONTACT</span><h2>같이 놀아볼까요?</h2></div><p class="section-lead">연락은 여기로!</p><a class="mail" href="mailto:ses2349@gmail.com">ses2349@gmail.com ↗</a></section>
+      <footer class="footer">© 서은실 · 놀자, 놀자, 새롭게 놀자~!!</footer>
+    </div>
+  </main>
 </div>
-
 <script>
-  // 한 줄 소개: 타자 치듯 한 글자씩
-  (function () {
-    var text = "놀자, 놀자, 새롭게 놀자~!!";
-    var el = document.getElementById("typed");
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { el.textContent = text; return; }
-    var i = 0;
-    function tick() {
-      i++;
-      el.textContent = text.slice(0, i);
-      if (i < text.length) setTimeout(tick, 140);
-    }
-    setTimeout(tick, 500);
-  })();
-
-  // 강점 카드: 휴대폰에서는 눌러서 뒤집기
-  document.querySelectorAll(".flip").forEach(function (c) {
-    c.addEventListener("click", function () { c.classList.toggle("flipped"); });
-    c.addEventListener("keydown", function (e) {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); c.classList.toggle("flipped"); }
-    });
-    c.addEventListener("mouseleave", function () { c.classList.remove("flipped"); });
-  });
-
-  // 경험 카드: 눌러서 펼치기
-  document.querySelectorAll(".exp-head").forEach(function (b) {
-    b.addEventListener("click", function () {
-      var card = b.parentElement;
-      var open = card.classList.toggle("open");
-      b.setAttribute("aria-expanded", open ? "true" : "false");
-    });
-  });
-
-  // 반짝이는 별
-  (function () {
-    var box = document.getElementById("stars");
-    var count = window.innerWidth < 860 ? 26 : 50;
-    var marks = ["✦", "✧", "·", "★"];
-    for (var i = 0; i < count; i++) {
-      var s = document.createElement("span");
-      s.className = "star";
-      s.textContent = marks[Math.floor(Math.random() * marks.length)];
-      s.style.left = Math.random() * 100 + "%";
-      s.style.top = Math.random() * 100 + "%";
-      s.style.fontSize = (8 + Math.random() * 11) + "px";
-      s.style.setProperty("--dur", (6 + Math.random() * 6) + "s");
-      s.style.setProperty("--delay", (Math.random() * 6) + "s");
-      box.appendChild(s);
-    }
-  })();
+(()=>{
+  const text='놀자, 놀자, 새롭게 놀자~!!';const typed=document.getElementById('typed');
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){typed.textContent=text;}else{let i=0;const tick=()=>{typed.textContent=text.slice(0,++i);if(i<text.length)setTimeout(tick,105)};setTimeout(tick,450)}
+  const stars=document.getElementById('stars');let seed=20261111;const rand=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};for(let i=0;i<45;i++){let s=document.createElement('span');s.className='star';s.textContent=i%4===0?'✦':'✧';s.style.left=(rand()*100)+'%';s.style.top=(rand()*100)+'%';s.style.setProperty('--size',(8+rand()*13)+'px');s.style.setProperty('--duration',(3+rand()*6)+'s');s.style.setProperty('--delay',(-rand()*8)+'s');stars.appendChild(s)}
+  const slides=document.getElementById('slides');const dots=Array.from(document.querySelectorAll('.dot'));const prev=document.getElementById('prev'),next=document.getElementById('next');let current=0;
+  function show(n){current=Math.max(0,Math.min(dots.length-1,n));slides.style.transform=`translateX(-${current*100}%)`;prev.disabled=current===0;next.disabled=current===dots.length-1;dots.forEach((d,i)=>{d.classList.toggle('active',i===current);d.setAttribute('aria-current',String(i===current))})}prev.addEventListener('click',()=>show(current-1));next.addEventListener('click',()=>show(current+1));dots.forEach(d=>d.addEventListener('click',()=>show(Number(d.dataset.index))));document.querySelector('.slider-window').addEventListener('keydown',e=>{if(e.key==='ArrowLeft'){e.preventDefault();show(current-1)}if(e.key==='ArrowRight'){e.preventDefault();show(current+1)}});let startX=0;const windowEl=document.querySelector('.slider-window');windowEl.addEventListener('touchstart',e=>{startX=e.changedTouches[0].screenX},{passive:true});windowEl.addEventListener('touchend',e=>{const diff=e.changedTouches[0].screenX-startX;if(Math.abs(diff)>45)show(current+(diff<0?1:-1))},{passive:true});show(0);
+  const main=document.getElementById('main-content');document.querySelectorAll('.sidebar a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t&&window.matchMedia('(min-width:701px)').matches){e.preventDefault();main.scrollTo({top:t.offsetTop-main.offsetTop,behavior:'smooth'});history.replaceState(null,'',a.getAttribute('href'))}}));
+})();
 </script>
 </body>
 </html>
