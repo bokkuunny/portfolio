@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>서은실 | 놀자, 놀자, 새롭게 놀자</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FBF4E4;
+    --cream-deep: #F3E7CC;
+    --navy: #1B2A5C;
+    --navy-soft: rgba(27, 42, 92, 0.55);
+    --coral: #FF6F61;
+    --coral-dark: #E9564A;
+    --gray: #CFCFCF;
+    --hand: "Nanum Pen Script", "Gaegu", "Segoe Script", cursive;
+    --serif: "Noto Serif KR", "Nanum Myeongjo", "Batang", Georgia, serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: var(--cream);
+    color: var(--navy);
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    line-height: 1.9;
+    overflow-x: hidden;
+  }
+
+  /* ---------- 반짝이는 별 ---------- */
+  #stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .star {
+    position: absolute;
+    color: var(--navy);
+    opacity: 0.1;
+    animation: twinkle var(--dur, 7s) ease-in-out var(--delay, 0s) infinite;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.06; transform: scale(0.7); }
+    50% { opacity: 0.5; transform: scale(1.15); }
+  }
+
+  /* ---------- 명함 한 장 ---------- */
+  .stage {
+    position: relative;
+    z-index: 1;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px;
+  }
+  .namecard {
+    width: 100%;
+    max-width: 1120px;
+    height: min(86svh, 780px);
+    background: rgba(251, 244, 228, 0.92);
+    border: 1.5px solid var(--navy);
+    outline: 1.5px solid var(--navy);
+    outline-offset: -9px;
+    box-shadow: 0 24px 50px -28px rgba(27, 42, 92, 0.55);
+    display: grid;
+    grid-template-columns: 42% 1fr;
+    overflow: hidden;
+  }
+
+  /* 왼쪽: 얼굴 */
+  .left {
+    padding: 44px 34px 40px 44px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border-right: 1px solid var(--navy);
+    justify-content: center;
+  }
+  .photo {
+    width: 128px;
+    aspect-ratio: 4 / 5;
+    background: var(--gray);
+    border: 1.5px solid var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6f6f6f;
+    font-size: 0.9rem;
+    letter-spacing: 0.3em;
+  }
+  .kicker {
+    font-size: 0.78rem;
+    letter-spacing: 0.35em;
+    color: var(--navy-soft);
+    text-transform: uppercase;
+  }
+  .name {
+    font-family: var(--hand);
+    font-size: clamp(3.6rem, 6vw, 5.2rem);
+    font-weight: 400;
+    line-height: 1;
+    margin-top: 4px;
+  }
+  .dept { letter-spacing: 0.25em; color: var(--navy-soft); line-height: 1.4; }
+  .typing {
+    font-family: var(--hand);
+    font-size: clamp(1.9rem, 3vw, 2.5rem);
+    line-height: 1.3;
+    min-height: 2.7em;
+    border-top: 1px solid var(--navy);
+    padding-top: 12px;
+    margin-top: 6px;
+  }
+  .caret {
+    display: inline-block;
+    width: 2px;
+    height: 1em;
+    background: var(--coral);
+    margin-left: 3px;
+    vertical-align: -0.12em;
+    animation: blink 0.9s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+  .about { font-size: 1.1rem; line-height: 1.95; }
+
+  /* 오른쪽: 핵심 */
+  .right {
+    padding: 38px 44px 34px 34px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  h2 {
+    font-family: var(--hand);
+    font-weight: 400;
+    font-size: 2.1rem;
+    line-height: 1;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  h2::after { content: ""; flex: 1; height: 1px; background: var(--navy); opacity: 0.4; }
+
+  /* 뒤집히는 강점 카드 */
+  .strengths { display: grid; gap: 10px; }
+  .flip {
+    perspective: 900px;
+    height: 100px;
+    cursor: pointer;
+    outline: none;
+  }
+  .flip-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.7s cubic-bezier(0.3, 0.8, 0.3, 1);
+    transform-style: preserve-3d;
+  }
+  .flip:hover .flip-inner,
+  .flip:focus-visible .flip-inner,
+  .flip.flipped .flip-inner { transform: rotateY(180deg); }
+  .flip:focus-visible { box-shadow: 0 0 0 3px var(--coral); }
+  .face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border: 1.5px solid var(--navy);
+    padding: 8px 18px;
+    display: flex;
+    align-items: center;
+  }
+  .front { background: var(--cream-deep); justify-content: space-between; }
+  .front .t { font-family: var(--hand); font-size: 2.2rem; line-height: 1; }
+  .front .hint { font-size: 0.8rem; letter-spacing: 0.2em; color: var(--navy-soft); }
+  .back {
+    background: var(--navy);
+    color: var(--cream);
+    transform: rotateY(180deg);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  /* 펼쳐지는 경험 카드 */
+  .exps { display: grid; gap: 10px; }
+  .exp { border: 1.5px solid var(--navy); background: #fff9; }
+  .exp-head {
+    width: 100%;
+    background: none;
+    border: 0;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    padding: 6px 18px;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+  .exp-head:focus-visible { outline: 3px solid var(--coral); outline-offset: -3px; }
+  .exp-head .t { font-family: var(--hand); font-size: 2rem; line-height: 1.2; }
+  .exp-head .p { color: var(--navy-soft); letter-spacing: 0.1em; font-size: 0.95rem; }
+  .exp-head .plus {
+    margin-left: auto;
+    font-size: 1.5rem;
+    color: var(--coral);
+    transition: transform 0.3s;
+  }
+  .exp.open .plus { transform: rotate(45deg); }
+  .exp-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s ease;
+  }
+  .exp.open .exp-body { grid-template-rows: 1fr; }
+  .exp-body > div { overflow: hidden; }
+  .exp-body dl {
+    display: grid;
+    grid-template-columns: 4em 1fr;
+    gap: 2px 12px;
+    padding: 4px 18px 14px;
+    border-top: 1px dashed var(--navy-soft);
+  }
+  .exp-body dt { color: var(--coral-dark); font-weight: 700; }
+
+  .bottom {
+    margin-top: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 14px;
+    border-top: 1px solid var(--navy);
+  }
+  .field-label { font-size: 0.78rem; letter-spacing: 0.3em; color: var(--navy-soft); line-height: 1.2; }
+  .field { font-family: var(--hand); font-size: 2.2rem; line-height: 1.1; }
+  .contact { text-align: right; line-height: 1.5; }
+  .contact .mail { font-size: 0.95rem; word-break: break-all; }
+  .btn {
+    display: inline-block;
+    margin-top: 6px;
+    background: var(--coral);
+    color: #fff;
+    border: 1.5px solid var(--navy);
+    padding: 6px 22px;
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn:hover { background: var(--coral-dark); transform: translateY(-2px); }
+
+  /* ---------- 휴대폰 ---------- */
+  @media (max-width: 860px) {
+    .stage { padding: 14px; align-items: flex-start; }
+    .namecard {
+      height: auto;
+      grid-template-columns: 1fr;
+      overflow: visible;
+    }
+    .left {
+      border-right: 0;
+      border-bottom: 1px solid var(--navy);
+      padding: 34px 26px 28px;
+    }
+    .right { padding: 28px 26px 32px; overflow: visible; }
+    .photo { width: 110px; }
+    .contact { text-align: left; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .star, .caret { animation: none; }
+    .flip-inner, .exp-body, .plus { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="stars" aria-hidden="true"></div>
+
+<div class="stage">
+  <article class="namecard">
+
+    <!-- 왼쪽 -->
+    <section class="left">
+      <div class="photo">사진</div>
+      <p class="kicker">Portfolio</p>
+      <div>
+        <h1 class="name">서은실</h1>
+        <p class="dept">컴교</p>
+      </div>
+      <p class="typing" aria-label="놀자, 놀자, 새롭게 놀자~!!"><span id="typed"></span><span class="caret"></span></p>
+      <p class="about">노는 게 좋고, 여기저기 다니면서 놀아보니 새로운 것도  느끼게 되고, 그래서 더 많은 곳에 가보고 싶어졌다.</p>
+    </section>
+
+    <!-- 오른쪽 -->
+    <section class="right">
+      <div>
+        <h2>강점·역량</h2>
+        <div class="strengths">
+          <div class="flip" tabindex="0" role="button" aria-label="혼자 놀기, 누르면 뒤집힙니다">
+            <div class="flip-inner">
+              <div class="face front"><span class="t">혼자 놀기</span><span class="hint">HOVER</span></div>
+              <div class="face back">조금 외롭겠지만 마냥 편하니 이보다 좋을소냐~~</div>
+            </div>
+          </div>
+          <div class="flip" tabindex="0" role="button" aria-label="같이 놀기, 누르면 뒤집힙니다">
+            <div class="flip-inner">
+              <div class="face front"><span class="t">같이 놀기</span><span class="hint">HOVER</span></div>
+              <div class="face back">혼자 놀다가도 가끔 좋은 사람과 순간을 공유하면 이것도 좋지~</div>
+            </div>
+          </div>
+          <div class="flip" tabindex="0" role="button" aria-label="즉석 만남, 누르면 뒤집힙니다">
+            <div class="flip-inner">
+              <div class="face front"><span class="t">즉석 만남</span><span class="hint">HOVER</span></div>
+              <div class="face back">약간 두렵기도 하겠지만 설레는 건....*아이만 아니면  같이 해 볼만도 하지...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h2>경험·활동</h2>
+        <div class="exps">
+          <div class="exp">
+            <button class="exp-head" type="button" aria-expanded="false">
+              <span class="t">시작</span><span class="p">2007.04</span><span class="plus">+</span>
+            </button>
+            <div class="exp-body"><div>
+              <dl>
+                <dt>역할</dt><dd>주인공</dd>
+                <dt>한 일</dt><dd>보고, 먹고, 놀고....</dd>
+                <dt>결과</dt><dd>처음이라 제대로 못함.....10점 만점에 4점</dd>
+              </dl>
+            </div></div>
+          </div>
+          <div class="exp">
+            <button class="exp-head" type="button" aria-expanded="false">
+              <span class="t">권태</span><span class="p">2024.07</span><span class="plus">+</span>
+            </button>
+            <div class="exp-body"><div>
+              <dl>
+                <dt>역할</dt><dd>들러리</dd>
+                <dt>한 일</dt><dd>그냥 같이 해주기</dd>
+                <dt>결과</dt><dd>맛집 섭</dd>
+              </dl>
+            </div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom">
+        <div>
+          <p class="field-label">ACTIVITY FIELD</p>
+          <p class="field">이사도라</p>
+        </div>
+        <div class="contact">
+          <p class="mail">ses2349@gmail.com</p>
+          <a class="btn" href="mailto:ses2349@gmail.com">메일 보내기</a>
+        </div>
+      </div>
+    </section>
+
+  </article>
+</div>
+
+<script>
+  // 한 줄 소개: 타자 치듯 한 글자씩
+  (function () {
+    var text = "놀자, 놀자, 새롭게 놀자~!!";
+    var el = document.getElementById("typed");
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { el.textContent = text; return; }
+    var i = 0;
+    function tick() {
+      i++;
+      el.textContent = text.slice(0, i);
+      if (i < text.length) setTimeout(tick, 140);
+    }
+    setTimeout(tick, 500);
+  })();
+
+  // 강점 카드: 휴대폰에서는 눌러서 뒤집기
+  document.querySelectorAll(".flip").forEach(function (c) {
+    c.addEventListener("click", function () { c.classList.toggle("flipped"); });
+    c.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); c.classList.toggle("flipped"); }
+    });
+    c.addEventListener("mouseleave", function () { c.classList.remove("flipped"); });
+  });
+
+  // 경험 카드: 눌러서 펼치기
+  document.querySelectorAll(".exp-head").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var card = b.parentElement;
+      var open = card.classList.toggle("open");
+      b.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  });
+
+  // 반짝이는 별
+  (function () {
+    var box = document.getElementById("stars");
+    var count = window.innerWidth < 860 ? 26 : 50;
+    var marks = ["✦", "✧", "·", "★"];
+    for (var i = 0; i < count; i++) {
+      var s = document.createElement("span");
+      s.className = "star";
+      s.textContent = marks[Math.floor(Math.random() * marks.length)];
+      s.style.left = Math.random() * 100 + "%";
+      s.style.top = Math.random() * 100 + "%";
+      s.style.fontSize = (8 + Math.random() * 11) + "px";
+      s.style.setProperty("--dur", (6 + Math.random() * 6) + "s");
+      s.style.setProperty("--delay", (Math.random() * 6) + "s");
+      box.appendChild(s);
+    }
+  })();
+</script>
+</body>
+</html>
